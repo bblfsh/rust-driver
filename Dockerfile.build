@@ -1,12 +1,12 @@
 FROM debian:jessie-slim
 
-ARG VERSION
-ENV VERSION $VERSION
+ARG NATIVE_RUNTIME_VERSION
+ENV NATIVE_RUNTIME_VERSION $NATIVE_RUNTIME_VERSION
 
 RUN apt update && \
-    apt install -y --no-install-recommends ca-certificates curl file make libc6-dev gcc && \
+    apt install -y --no-install-recommends ca-certificates git curl file make libc6-dev gcc && \
     curl https://sh.rustup.rs -sSf | sh -s -- -y \
-        --default-toolchain $VERSION
+        --default-toolchain $NATIVE_RUNTIME_VERSION
 
-ENV PATH="/root/.cargo/bin/:$PATH"
-WORKDIR /opt/driver
+ENV PATH /root/.cargo/bin/:$PATH
+WORKDIR /opt/driver/src/

@@ -1,9 +1,9 @@
 # Config
-DOCKER_IMAGE := bblfsh/rust-driver
-VERSION := nightly-2017-02-20
+LANGUAGE := rust
+NATIVE_RUNTIME_VERSION := nightly-2017-02-20
 
 # Rust
-RUSTUP_CMD := rustup run $(VERSION)
+RUSTUP_CMD := rustup run $(NATIVE_RUNTIME_VERSION)
 CARGO_CMD := $(RUSTUP_CMD) cargo
 
 test-native:
@@ -13,6 +13,6 @@ test-native:
 build-native:
 	cd native; \
 	$(CARGO_CMD) install; \
-    $(CARGO_CMD) build --release
+	$(CARGO_CMD) build --release
 
--include .sdk/Makefile
+include .sdk/Makefile

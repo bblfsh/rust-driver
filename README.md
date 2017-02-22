@@ -1,4 +1,4 @@
-# babelfish-rust-driver
+# rust-driver [![Build Status](https://travis-ci.org/bblfsh/rust-driver.svg?branch=master)](https://travis-ci.org/bblfsh/rust-driver)
 
 Rust driver for [babelfish](https://github.com/src-d/babelfish).
 
