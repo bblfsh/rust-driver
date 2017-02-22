@@ -1,0 +1,12 @@
+FROM debian:jessie-slim
+
+ARG VERSION
+ENV VERSION $VERSION
+
+RUN apt update && \
+    apt install -y --no-install-recommends ca-certificates curl file make libc6-dev gcc && \
+    curl https://sh.rustup.rs -sSf | sh -s -- -y \
+        --default-toolchain $VERSION
+
+ENV PATH="/root/.cargo/bin/:$PATH"
+WORKDIR /opt/driver

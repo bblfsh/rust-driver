@@ -1,27 +1,6 @@
-FROM debian:jessie
-MAINTAINER src-d
+FROM bblfsh/rust-driver-build
 
-ENV DEBIAN_FRONTEND=noninteractive
+ENV LD_LIBRARY_PATH /root/.rustup/toolchains/$VERSION-x86_64-unknown-linux-gnu/lib/:$LD_LIBRARY_PATH
 
-ADD https://static.rust-lang.org/rustup.sh rustup.sh
-
-RUN apt-get update && \
-    apt-get install \
-       ca-certificates \
-       curl \
-       sudo \
-       gcc \
-       file \
-       libc6-dev \
-       -qqy \
-       --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN sh rustup.sh --channel=nightly
-
-RUN mkdir -p /opt/rust
-ADD . /opt/rust
-WORKDIR /opt/rust
-RUN cargo install && \
-        cargo build --release
-CMD $HOME/.cargo/bin/rust-parser
+ADD native/target /opt/driver/native/target/
+CMD /opt/driver/native/target/release/rust-parser

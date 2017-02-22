@@ -1,3 +1,10 @@
-language: rust
-rust:
-  - nightly
+language: go
+
+go:
+  - 1.8
+
+services:
+  - docker
+
+script:
+  - make test
