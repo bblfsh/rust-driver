@@ -1,0 +1,5 @@
+language = "rust"
+status = "pre-alpha"
+
+[runtime]
+  native_version = ["nightly-2017-02-20"]

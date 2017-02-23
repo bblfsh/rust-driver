@@ -1,9 +1,4 @@
-# Config
-LANGUAGE := rust
-NATIVE_RUNTIME_VERSION := nightly-2017-02-20
-
-# Rust
-RUSTUP_CMD := rustup run $(NATIVE_RUNTIME_VERSION)
+RUSTUP_CMD := rustup run $(RUNTIME_NATIVE_VERSION)
 CARGO_CMD := $(RUSTUP_CMD) cargo
 
 test-native:
