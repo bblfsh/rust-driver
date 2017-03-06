@@ -16,22 +16,10 @@ use std::io::{BufRead, stdin};
 use serialize::json::as_json;
 use rustparse::{parse_source, ParsedAST, ParseStatus};
 use rustc_serialize::json::decode;
-use std::time::Duration;
-use std::thread;
-
-static LANGUAGE: &'static str = "Rust";
-static LANGUAGE_VERSION: &'static str = "1.0";
-static DRIVER: &'static str = "parser-rust:1.0";
-static PARSE_ACTION: &'static str = "ParseAST";
-
-static ERR_DECODE: &'static str = "error decoding input from json";
 
 /// Input received via stdin from the caller of the driver.
 #[derive(RustcDecodable, RustcEncodable)]
 struct ParseInput {
-    action: String,
-    language: Option<String>,
-    language_version: Option<String>,
     content: String,
 }
 
@@ -41,9 +29,6 @@ struct ParseOutput {
     ast: Option<Crate>,
     errors: Vec<Diagnostic>,
     status: ParseStatus,
-    language: String,
-    language_version: String,
-    driver: String,
 }
 
 impl ParseOutput {
@@ -52,9 +37,6 @@ impl ParseOutput {
             ast: ast.ast,
             errors: ast.errors,
             status: ast.status,
-            language: LANGUAGE.into(),
-            language_version: LANGUAGE_VERSION.into(),
-            driver: DRIVER.into(),
         }
     }
 
@@ -69,13 +51,9 @@ impl ParseOutput {
                 code: None,
             }],
             status: ParseStatus::Fatal,
-            language: LANGUAGE.into(),
-            language_version: LANGUAGE_VERSION.into(),
-            driver: DRIVER.into(),
         }
     }
 }
-
 
 fn report_error(msg: String) {
     println!("{}", as_json(&ParseOutput::from_error(msg)));
@@ -88,10 +66,6 @@ fn handle_request(content: String) -> Result<ParseOutput, String> {
             return Err("error decoding input from json".into());
         },
     };
-
-    if input.action != PARSE_ACTION {
-        return Err(format!("unknown action {}", input.action));
-    }
 
     Ok(ParseOutput::from_ast(parse_source(input.content)))
 }
@@ -106,8 +80,7 @@ fn main() {
         }
 
         if line.len() == 0 {
-            thread::sleep(Duration::from_millis(500));
-            continue;
+            return;
         }
         
         match handle_request(line) {
@@ -120,9 +93,6 @@ fn main() {
 #[test]
 fn test_handle_request() {
     let result = handle_request(format!("{}", as_json(&ParseInput{
-        action: PARSE_ACTION.into(),
-        language: None,
-        language_version: None,
         content: r#"
         #[derive(Debug, Clone, Copy)]
         pub struct Point {
@@ -143,9 +113,6 @@ fn test_handle_request() {
     println!("{}", as_json(&output));
     assert_eq!(output.errors.len(), 0);
     assert!(output.ast.is_some());
-    assert_eq!(output.language, String::from(LANGUAGE));
-    assert_eq!(output.language_version, String::from(LANGUAGE_VERSION));
-    assert_eq!(output.driver, String::from(DRIVER));
 }
 
 #[test]
