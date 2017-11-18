@@ -6,7 +6,7 @@ RUSTUP_CMD := rustup run $(RUNTIME_NATIVE_VERSION)
 CARGO_CMD := $(RUSTUP_CMD) cargo
 
 test-native-internal:
-	@cd native; \
+	cd native; \
 	$(RUN_VERBOSE) $(CARGO_CMD) test
 
 build-native-internal:
@@ -14,4 +14,4 @@ build-native-internal:
 	cd native; \
 	$(CARGO_CMD) install; \
 	$(CARGO_CMD) build --release; \
-	cp target/release/rust-parser $(BUILD_PATH)/native
+	cp target/release/rust-parser $(BUILD_PATH)/bin/native

@@ -1,25 +1,19 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"github.com/bblfsh/rust-driver/driver/normalizer"
 
-	"github.com/bblfsh/sdk"
-
-	_ "github.com/bblfsh/rust-driver/driver/normalizer"
+	"gopkg.in/bblfsh/sdk.v1/sdk/driver"
 )
 
-var version string
-var build string
-
 func main() {
-	fmt.Printf("version: %s\nbuild: %s\n", version, build)
-
-	_, err := os.Stat(sdk.NativeBin)
-	if err == nil {
-		fmt.Println("native: ok")
-		return
+	d, err := driver.NewDriver(normalizer.ToNode, normalizer.Transformers)
+	if err != nil {
+		panic(err)
 	}
 
-	fmt.Printf("native: %s\n", err)
+	s := driver.NewServer(d)
+	if err := s.Start(); err != nil {
+		panic(err)
+	}
 }

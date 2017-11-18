@@ -1,7 +1,7 @@
 language = "rust"
-status = "pre-alpha"
+status = "alpha"
 
 [runtime]
-  os = "debian"
-  go_version = "1.8"
-  native_version = ["nightly-2017-02-20"]
+os = "debian"
+go_version = "1.8"
+native_version = ["nightly-2017-02-20"]
