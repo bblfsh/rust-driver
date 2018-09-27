@@ -1,5 +1,5 @@
 language = "rust"
-status = "alpha"
+status = "pre-alpha"
 
 [runtime]
 os = "debian"
